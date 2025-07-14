@@ -8,12 +8,12 @@ import (
 )
 
 func main() {
-	// Обработка запроса на /hello
 	http.HandleFunc("/hello", handlers.HelloHandler)
 
 	http.HandleFunc("/sum", handlers.SumHandler)
 
-	// Запуск сервера на порту 8080
+	http.HandleFunc("/sort", handlers.SortHandler)
+
 	fmt.Println("Сервер запущен на http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 }
