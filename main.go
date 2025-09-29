@@ -14,6 +14,8 @@ func main() {
 
 	http.HandleFunc("/sort", handlers.SortHandler)
 
+	http.HandleFunc("/goroutines", handlers.RoutinesHandler)
+
 	fmt.Println("Сервер запущен на http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 }
