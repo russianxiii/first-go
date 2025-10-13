@@ -33,10 +33,9 @@ func RoutinesHandler(w http.ResponseWriter, r *http.Request) {
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 
-	w.Write([]byte("Goroutines!\n\n"))
+	w.Write([]byte("Goroutines and mutex!\n\n"))
 
 	arr := []string{
-		"\n",
 		"User 1: hello!",
 		"User 2: hi!",
 		"User 1: how are you?",
