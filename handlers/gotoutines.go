@@ -3,31 +3,43 @@ package handlers
 import (
 	"net/http"
 	"sync"
-	"time"
+
+	"fmt"
 )
 
-func sayHello(w http.ResponseWriter, wg *sync.WaitGroup, message string) {
+func sayHello(wg *sync.WaitGroup, mu *sync.Mutex, message string, messages *[]string, idx int) {
 	defer wg.Done()
 
-	w.Write([]byte(message))
+	mu.Lock()
+	(*messages)[idx] = message
+	mu.Unlock()
 }
 
 func RoutinesHandler(w http.ResponseWriter, r *http.Request) {
 	var wg sync.WaitGroup
+	var mu sync.Mutex
+
 	w.Write([]byte("Goroutines!\n\n"))
 
-	arr := [4]string{
+	arr := []string{
+		"\n",
 		"User 1: hello!\n",
 		"User 2: hi!\n",
 		"User 1: how are you?\n",
 		"User 2: fine!\n",
 	}
 
-	for _, value := range arr {
+	messages := make([]string, len(arr))
+
+	for i, value := range arr {
 		wg.Add(1)
-		go sayHello(w, &wg, value)
-		time.Sleep(time.Millisecond)
+		go sayHello(&wg, &mu, value, &messages, i)
 	}
 
 	wg.Wait()
+
+	for _, msg := range messages {
+		w.Write([]byte(msg))
+		fmt.Println(msg)
+	}
 }
