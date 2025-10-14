@@ -10,15 +10,15 @@ import (
 
 func sayHello(wg *sync.WaitGroup, mu *sync.Mutex, message string, messages *[]string, idx int) {
 	defer wg.Done()
-
 	mu.Lock()
+	defer mu.Unlock()
+
 	var err error
 	if message == "User X: 404" {
 		err = simulateWriteError()
 	} else {
 		(*messages)[idx] = message
 	}
-	mu.Unlock()
 
 	if err != nil {
 		log.Println("Error writing message:", err)
